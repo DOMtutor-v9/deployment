@@ -1,5 +1,3 @@
-version: "3.6"
-
 volumes:
   mariadb_data: {}
 
@@ -10,7 +8,7 @@ networks:
 services:
   mariadb:
     container_name: domjudge_mariadb
-    image: mariadb:10.8
+    image: mariadb:lts
     networks:
       - domjudge
     ports:
@@ -23,7 +21,7 @@ services:
       MARIADB_USER: domjudge
       MARIADB_PASSWORD: domjudge
       MARIADB_DATABASE: domjudge
-    
+
   domserver:
     container_name: domjudge
     image: incaseoftrouble/domtutor_domserver
@@ -40,7 +38,7 @@ services:
       MYSQL_USER: domjudge
       MYSQL_PASSWORD: domjudge
       MYSQL_DATABASE: domjudge
-      CONTAINER_TIMEZONE: Europe/Vienna
+      CONTAINER_TIMEZONE: ${TZ}
       DJ_DB_INSTALL_BARE: 1
 
   judgehost:
@@ -57,7 +55,7 @@ services:
       - domserver
     environment:
       DAEMON_ID: 1
-      CONTAINER_TIMEZONE: Europe/Vienna
+      CONTAINER_TIMEZONE: ${TZ}
       JUDGEDAEMON_USERNAME: judgehost
       JUDGEDAEMON_PASSWORD: judgepassword
       DOMSERVER_BASEURL: http://domjudge/

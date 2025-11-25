@@ -11,7 +11,7 @@ volumes:
 services:
   mariadb:
     container_name: domjudge_mariadb
-    image: mariadb:10.8
+    image: mariadb:lts
     networks:
       - domjudge
     ports:
@@ -27,21 +27,22 @@ services:
 
   mariadb-backup:
     container_name: domjudge_mariadb_backup
-    image: fradelg/mysql-cron-backup:1.8.1
+    image: fradelg/mysql-cron-backup:1.14.1
     networks:
       - domjudge
     volumes:
       - mariadb_backup:/backup
     restart: unless-stopped
     environment:
-      MYSQL_HOST: mariadb
-      MYSQL_PORT: 3306
-      MYSQL_USER: root
-      MYSQL_PASS: ${DB_ROOT_PASSWORD:?}
-      CRON_TIME: 12 */6 * * *
-      MAX_BACKUPS: 12
-      INIT_BACKUP: 1
-      TZ: Europe/Vienna
+      - MYSQL_HOST: mariadb
+      - MYSQL_PORT: 3306
+      - MYSQL_USER: root
+      - MYSQL_PASS: ${DB_ROOT_PASSWORD:?}
+      - CRON_TIME: 12 */6 * * *
+      - MAX_BACKUPS: 12
+      - INIT_BACKUP: 1
+      - TZ
+
     
   domserver:
     container_name: domjudge
